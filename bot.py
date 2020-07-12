@@ -27,9 +27,13 @@ class Bot():
         driver.find_element_by_xpath('//*[@id="react-root"]/section/nav/div[2]/div/div/div[3]/div/div[5]/div[2]/div/div[2]/div[2]/a[1]/div').click()#go to profile
         time.sleep(2)
         driver.find_element_by_xpath('//*[@id="react-root"]/section/main/div/header/section/ul/li[3]/a').click()#clicks on following
-
-
+        time.sleep(2)
+        resultSet = driver.find_element_by_xpath('/html/body/div[4]/div/div/div[2]/ul')
+        options = resultSet.find_elements_by_tag_name("li")
+        for option in options:
+            following.append(option.text)
+        return following
 
 
 myBot=Bot('siddmohann122','hello12345')
-myBot.get_following()
+
