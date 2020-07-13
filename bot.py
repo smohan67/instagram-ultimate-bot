@@ -33,20 +33,41 @@ class InstaBot:
 		"""Lines above login"""
 	def get_followers_and_following(self):#gets a list of the people who follow you and who you follow
 		sleep(1)
-		self.driver.find_element_by_xpath('//*[@id="react-root"]/section/nav/div[2]/div/div/div[3]/div/div[5]/span/img').click()
+		WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="react-root"]/section/nav/div[2]/div/div/div[3]/div/div[5]/span/img'))).click()#p pic
 		sleep(1)
-		self.driver.find_element_by_xpath('//*[@id="react-root"]/section/nav/div[2]/div/div/div[3]/div/div[5]/div[2]/div/div[2]/div[2]/a[1]/div').click()
-		"""Go to Profile"""
+		WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="react-root"]/section/nav/div[2]/div/div/div[3]/div/div[5]/div[2]/div/div[2]/div[2]/a[1]/div'))).click()#click on profile option
+		sleep(3)
+		"""Lines above Go to Profile"""
+
+		WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/section/main/div/header/section/ul/li[2]'))).click()
+		sleep(2)
+		"""Goes to the the followers of following button"""
+
+		scroll_box=WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[4]/div/div/div[2]')))#defines the box of the followers
+		last_ht = 0
+		ht=1
+		while last_ht != ht:
+			last_ht = ht
+			sleep(3)
+			ht = self.driver.execute_script("""
+				arguments[0].scrollTo(0, arguments[0].scrollHeight);
+				return arguments[0].scrollHeight;
+				""", scroll_box)
+
+		"""Lines above scroll through the box"""
+		links = scroll_box.find_elements_by_tag_name('a')
+		names = [name.text for name in links if name.text != '']#adds the names of the people to this list by extracting the name from the links
+
+		self.driver.find_element_by_xpath("/html/body/div[4]/div/div/div[1]/div/div[2]/button").click()# close button
+		return names#makes this function hold the value of the names
 
 
 
 
 
-
-
-
-my_bot = InstaBot(username,password)#creates the bot based on your username and password
-my_bot.get_followers_and_following()
+my_bot = InstaBot('replace with username','replace with password' )#creates the bot based on your username and password
+print(len(my_bot.get_followers_and_following()))
+print("END")
 
 
 
