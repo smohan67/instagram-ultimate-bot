@@ -49,5 +49,5 @@ my_bot = InstaBot(username,password)#creates the bot based on your username and 
 my_bot.get_followers_and_following()
 
 
-myBot=Bot('siddmohann122','hello12345')
+myBot=Bot(,)
 
