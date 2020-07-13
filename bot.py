@@ -80,5 +80,5 @@ class InstaBot:
 
 
 
-my_bot = InstaBot('siddmohann122','hello12345' )#creates the bot based on your username and password
+my_bot = InstaBot()#creates the bot based on your username and password
 print(my_bot.get_unfollowers())
