@@ -31,17 +31,21 @@ class InstaBot:
 		except:
 			pass
 		"""Lines above login"""
-	def get_followers_and_following(self):#gets a list of the people who follow you and who you follow
+	def get_followers_and_following(self,f):#gets a list of the people who follow you and who you follow
 		sleep(1)
 		WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="react-root"]/section/nav/div[2]/div/div/div[3]/div/div[5]/span/img'))).click()#p pic
 		sleep(1)
 		WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="react-root"]/section/nav/div[2]/div/div/div[3]/div/div[5]/div[2]/div/div[2]/div[2]/a[1]/div'))).click()#click on profile option
 		sleep(3)
 		"""Lines above Go to Profile"""
+		if f=='followers':
+			WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/section/main/div/header/section/ul/li[2]'))).click()
+			sleep(2)
+		else:
+			WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="react-root"]/section/main/div/header/section/ul/li[3]/a'))).click()
+			sleep(2)
+		"""Goes to the the followers or following button"""
 
-		WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/section/main/div/header/section/ul/li[2]'))).click()
-		sleep(2)
-		"""Goes to the the followers of following button"""
 
 		scroll_box=WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[4]/div/div/div[2]')))#defines the box of the followers
 		last_ht = 0
@@ -59,15 +63,22 @@ class InstaBot:
 		names = [name.text for name in links if name.text != '']#adds the names of the people to this list by extracting the name from the links
 
 		self.driver.find_element_by_xpath("/html/body/div[4]/div/div/div[1]/div/div[2]/button").click()# close button
+		self.driver.back()#go back
+		self.driver.back()#go back
+		self.driver.back()#go back
 		return names#makes this function hold the value of the names
+	def get_unfollowers(self):#gets the people that dont follow you back
+		followers=self.get_followers_and_following('followers')#stores your followers
+		following=self.get_followers_and_following('yedey')#stores people you follow
+		print(len(followers))
+		print(len(following))
+		trouble=[]
+		for p in following:
+			if p not in followers:
+				trouble.append(p)
+		return trouble
 
 
 
-
-
-my_bot = InstaBot('replace with username','replace with password' )#creates the bot based on your username and password
-print(len(my_bot.get_followers_and_following()))
-print("END")
-
-
-
+my_bot = InstaBot('siddmohann122','hello12345' )#creates the bot based on your username and password
+print(my_bot.get_unfollowers())
