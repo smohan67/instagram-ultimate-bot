@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
-
+from selenium.webdriver.common.keys import Keys
 
 class InstaBot:
 	def __init__(self, username, pw):#logs in your account
@@ -31,6 +31,7 @@ class InstaBot:
 		except:
 			pass
 		"""Lines above login"""
+
 	def get_followers_and_following(self,f):#gets a list of the people who follow you and who you follow
 		sleep(1)
 		WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="react-root"]/section/nav/div[2]/div/div/div[3]/div/div[5]/span/img'))).click()#p pic
@@ -67,6 +68,7 @@ class InstaBot:
 		self.driver.back()#go back
 		self.driver.back()#go back
 		return names#makes this function hold the value of the names
+
 	def get_unfollowers(self):#gets the people that dont follow you back
 		followers=self.get_followers_and_following('followers')#stores your followers
 		following=self.get_followers_and_following('yedey')#stores people you follow
@@ -78,7 +80,16 @@ class InstaBot:
 				trouble.append(p)
 		return trouble
 
-
-
-my_bot = InstaBot()#creates the bot based on your username and password
-print(my_bot.get_unfollowers())
+	def send_message(self,follower,message):
+		WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/section/nav/div[2]/div/div/div[3]/div/div[2]/a'))).click()#click on dm button on homepage
+		WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/section/div/div[2]/div/div/div[1]/div[1]/div/div[3]/button'))).click()#click compose message
+		sleep(2)
+		self.driver.find_element_by_xpath('/html/body/div[4]/div/div/div[2]/div[1]/div/div[2]/input').send_keys(follower)
+		sleep(2)
+		self.driver.find_element_by_xpath('/html/body/div[4]/div/div/div[2]/div[2]/div[1]/div/div[3]/button').click()
+		WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[4]/div/div/div[1]/div/div[2]/div/button'))).click()
+		sleep(2)
+		WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="react-root"]/section/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div/div[2]/textarea'))).send_keys(message)
+		WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/section/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div/div[3]/button'))).click()
+		self.driver.back()
+		self.driver.back()
