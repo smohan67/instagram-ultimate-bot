@@ -5,7 +5,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.keys import Keys
-
+#import all the selenium packages
 class InstaBot:
 	def __init__(self, username, pw):#logs in your account
 		self.username = username#username
@@ -69,7 +69,7 @@ class InstaBot:
 		self.driver.back()#go back
 		return names#makes this function hold the value of the names
 
-	def get_unfollowers(self):#gets the people that dont follow you back
+	def get_unfollowers(self,send_message=False):#gets the people that dont follow you back
 		followers=self.get_followers_and_following('followers')#stores your followers
 		following=self.get_followers_and_following('yedey')#stores people you follow
 		print(len(followers))
@@ -78,6 +78,9 @@ class InstaBot:
 		for p in following:
 			if p not in followers:
 				trouble.append(p)
+		if send_message:#requests to send a message
+			for person in trouble:
+				self.send_message(person,'You dont folow me back...nah jk im bored so i descided to make a bot that would send this to all the people that dont follow me back have a nice day')
 		return trouble
 
 	def send_message(self,follower,message):
@@ -86,10 +89,12 @@ class InstaBot:
 		sleep(2)
 		self.driver.find_element_by_xpath('/html/body/div[4]/div/div/div[2]/div[1]/div/div[2]/input').send_keys(follower)
 		sleep(2)
-		self.driver.find_element_by_xpath('/html/body/div[4]/div/div/div[2]/div[2]/div[1]/div/div[3]/button').click()
+		WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[4]/div/div/div[2]/div[2]/div[1]/div/div[3]/button'))).send_keys(message)
 		WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[4]/div/div/div[1]/div/div[2]/div/button'))).click()
 		sleep(2)
-		WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="react-root"]/section/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div/div[2]/textarea'))).send_keys(message)
+		WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="react-root"]/section/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div/div[2]/textarea'))).send_keys(message)#type message
 		WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/section/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div/div[3]/button'))).click()
-		self.driver.back()
-		self.driver.back()
+		WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/section/div/div[1]/div/div[1]/a/div/div/img'))).click()#click send
+
+b=InstaBot('karsten_ivey_fan_account','hello12345')
+b.get_unfollowers()
