@@ -6,7 +6,13 @@ from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.keys import Keys
 #import all the selenium packages
-class InstaBot:
+
+
+
+
+
+
+class Bot:
 	def __init__(self, username, pw):#logs in your account
 		self.username = username#username
 		self.password=pw#password
@@ -32,8 +38,11 @@ class InstaBot:
 			pass
 		"""Lines above login"""
 
-	def get_followers_and_following(self,f):#gets a list of the people who follow you and who you follow
-		self.go_to_account(self.username)
+	def get_followers_and_following(self,f,acc='me'):#gets a list of the people who follow you and who you follow
+		if acc=='me':
+			self.go_to_others_profile(self.username)
+		else:
+			go_to_others_profile(acc)
 		if f=='followers':
 			WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/section/main/div/header/section/ul/li[2]'))).click()
 			sleep(2)
@@ -76,9 +85,10 @@ class InstaBot:
 		if send_message:#requests to send a message
 			for person in trouble:
 				self.send_message(person,'You dont folow me back...nah jk im bored so i descided to make a bot that would send this to all the people that dont follow me back have a nice day')
+		print(trouble)
 		return trouble
 
-	def send_message(self,follower,message):
+	def send_message(self,follower,message,unsend=True):
 		WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/section/nav/div[2]/div/div/div[3]/div/div[2]/a'))).click()#click on dm button on homepage
 		WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/section/div/div[2]/div/div/div[1]/div[1]/div/div[3]/button'))).click()#click compose message
 		sleep(2)
@@ -90,11 +100,16 @@ class InstaBot:
 		WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="react-root"]/section/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div/div[2]/textarea'))).send_keys(message)#type message
 		WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/section/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div/div[3]/button'))).click()
 		WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/section/div/div[1]/div/div[1]/a/div/div/img'))).click()#click send
-	def go_to_account(self, account):
-		if account==self.username:
-			sleep(1)
-			WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="react-root"]/section/nav/div[2]/div/div/div[3]/div/div[5]/span/img'))).click()#p pic
-			sleep(1)
-			WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="react-root"]/section/nav/div[2]/div/div/div[3]/div/div[5]/div[2]/div/div[2]/div[2]/a[1]/div'))).click()#click on profile option
-			sleep(3)
-		"""Lines above Go to Profile"""
+	def unfollow_someone(self,person):
+		self.go_to_others_profile(person)
+		try:	
+			WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/section/main/div/header/section/div[1]/div[1]/span/span[1]/button'))).click()
+		except:
+			WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/section/main/div/header/section/div[1]/div[2]/span/span[1]/button'))).click()
+			WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[4]/div/div/div/div[3]/button[1]'))).click()
+	def go_to_others_profile(self,person):
+		x=WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="react-root"]/section/nav/div[2]/div/div/div[2]/input')))
+		x.send_keys(person)
+		WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="react-root"]/section/nav/div[2]/div/div/div[2]/div[3]/div[2]/div/a[1]'))).click()
+
+
