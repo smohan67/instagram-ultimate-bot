@@ -1,5 +1,5 @@
-from selenium import webdriver
-from time import sleep
+from selenium import webdriver#webdriver main
+from time import sleep#to pause
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -16,7 +16,7 @@ class Bot:
 	def __init__(self, username, pw):#logs in your account
 		self.username = username#username
 		self.password=pw#password
-		self.driver = webdriver.Chrome(ChromeDriverManager().install())#driver
+		self.driver = webdriver.Chrome(ChromeDriverManager().install())#driver installed
 		"""Lines above just set up everything we need"""
 
 		self.driver.get('https://www.instagram.com/')#go to instagram.com
@@ -27,28 +27,31 @@ class Bot:
 		sleep(5)#wait 3 seconds
 
 		try:
-			self.driver.find_element_by_xpath('//*[@id="react-root"]/section/main/div/div/div/div/button').click()
+			self.driver.find_element_by_xpath('//*[@id="react-root"]/section/main/div/div/div/div/button').click()#clicks on dont save
 			sleep(2)
 		except:
 			pass
 
 		try:
-			self.driver.find_element_by_xpath('/html/body/div[4]/div/div/div/div[3]/button[2]').click()
+			self.driver.find_element_by_xpath('/html/body/div[4]/div/div/div/div[3]/button[2]').click()#clicks on dont turn off notifications
 		except:
 			pass
 		"""Lines above login"""
 
-	def get_followers_and_following(self,f,acc='me'):#gets a list of the people who follow you and who you follow
+	def get_followers_and_following(self,f,acc='me'):#gets a list of the people who follow you and who you or someone else follow
 		if acc=='me':
 			self.go_to_others_profile(self.username)
 		else:
 			go_to_others_profile(acc)
-		if f=='followers':
-			WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/section/main/div/header/section/ul/li[2]'))).click()
-			sleep(2)
-		else:
-			WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="react-root"]/section/main/div/header/section/ul/li[3]/a'))).click()
-			sleep(2)
+		try:
+			if f=='followers':
+				WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/section/main/div/header/section/ul/li[2]'))).click()
+				sleep(2)
+			else:
+				WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="react-root"]/section/main/div/header/section/ul/li[3]/a'))).click()
+				sleep(2)
+		except:
+			return 'account is private'
 		"""Goes to the the followers or following button"""
 
 
