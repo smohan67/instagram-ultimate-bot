@@ -1,7 +1,22 @@
 # instagram-ultimate-bot
-can do many things on instagram
 
-Issues: if u have alot of followers and want to find out people who unfollowed you, it can take longer then 10 minutes.
-New Features:Can now send automated dms to people,follow/unfollow someone
+Features:
+-login
+-get a list of the people who follow you and people you follow
+-finds people who dont follow u back and can send a message to each of them and/or unfollow them
+-send a message to someone automatically
+-follow someone
+-unfollow someone
+-go to someones profile
+-download someones posts
+
+
+
+Bugs:
+-Can take a while if you have many followers or followinf=g a lot of people to get back all the people who dont follow u back and to unfollow and send messages to each of them
+-Sometimes if your internet is slow to load up a page, the program will crash
+-Can only download up to 24 posts, cant download videos or download posts with multiple pictures
+
+
 
 This is my first project so I'd really apreciate some feedback!
