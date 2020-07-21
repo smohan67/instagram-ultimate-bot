@@ -157,5 +157,8 @@ class Bot:
 		q=1
 		#downloads images
 		for y in dls:
-			urllib.request.urlretrieve(y, "s/"+acc+str(q)+'.jpg')
+			try:
+				urllib.request.urlretrieve(y, "s/"+acc+str(q)+'.jpg')
+			except:
+				return 'No folder named s found. Create one the try again'
 			q+=1
