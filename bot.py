@@ -118,15 +118,44 @@ class Bot:
 			WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="react-root"]/section/nav/div[2]/div/div/div[2]/div[3]/div[2]/div/a[1]'))).click()
 		except:
 			print('no results found')
-	def download_users_posts(self,acc):
+	def download_all_users_posts(self,driver, timeout,acc):
 		self.go_to_others_profile(acc)
 		sleep(3)
-		x=self.driver.find_elements_by_class_name("FFVAD")
+		scroll_pause_time = timeout
+
+		# Get scroll height
+		last_height = driver.execute_script("return document.body.scrollHeight")
+		num=1
 		dls=[]
-		for t in x:
-			z=t.get_attribute('src')
-			dls.append(z)
+		while True:
+			sleep(3)
+			x=self.driver.find_elements_by_class_name("FFVAD")
+			
+			for t in x:
+				z=t.get_attribute('src')
+				if z not in dls:
+					dls.append(z)
+
+			
+			
+			# Scroll down to bottom
+			driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+
+			# Wait to load page
+			sleep(scroll_pause_time)
+
+	
+			
+
+			# Calculate new scroll height and compare with last scroll height
+			new_height = driver.execute_script("return document.body.scrollHeight")
+			if new_height == last_height:
+				# If heights are the same it will exit the function
+				break
+			last_height = new_height
+			
 		q=1
+		#downloads images
 		for y in dls:
 			urllib.request.urlretrieve(y, "s/"+acc+str(q)+'.jpg')
 			q+=1
