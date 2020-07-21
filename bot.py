@@ -117,3 +117,15 @@ class Bot:
 			WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="react-root"]/section/nav/div[2]/div/div/div[2]/div[3]/div[2]/div/a[1]'))).click()
 		except:
 			print('no results found')
+	def download_users_posts(self,acc):
+		self.go_to_others_profile(acc)
+		sleep(3)
+		x=self.driver.find_elements_by_class_name("FFVAD")
+		dls=[]
+		for t in x:
+			z=t.get_attribute('src')
+			dls.append(z)
+		q=1
+		for y in dls:
+			urllib.request.urlretrieve(y, "s/"+acc+str(q)+'.jpg')
+			q+=1
