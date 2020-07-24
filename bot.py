@@ -6,11 +6,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.keys import Keys
 import urllib.request
+import pandas
 #import all the selenium packages
-
-
-
-
 
 
 class Bot:
@@ -77,7 +74,7 @@ class Bot:
 		self.driver.back()#go back
 		return names#makes this function hold the value of the names
 
-	def get_unfollowers(self,send_message=False):#gets the people that dont follow you back
+	def get_unfollowers(self,send_message=False):#gets the people that dont follow you back and has the option to send a message to them
 		followers=self.get_followers_and_following('followers')#stores your followers
 		following=self.get_followers_and_following('yedey')#stores people you follow
 		print(len(followers))
@@ -92,7 +89,7 @@ class Bot:
 		print(trouble)
 		return trouble
 
-	def send_message(self,follower,message,unsend=True):
+	def send_message(self,follower,message,unsend=True):#can send a message to someone
 		WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/section/nav/div[2]/div/div/div[3]/div/div[2]/a'))).click()#click on dm button on homepage
 		WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/section/div/div[2]/div/div/div[1]/div[1]/div/div[3]/button'))).click()#click compose message
 		sleep(2)
@@ -104,21 +101,25 @@ class Bot:
 		WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="react-root"]/section/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div/div[2]/textarea'))).send_keys(message)#type message
 		WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/section/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div/div[3]/button'))).click()
 		WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/section/div/div[1]/div/div[1]/a/div/div/img'))).click()#click send
-	def unfollow_or_follow_someone(self,person):
+	
+	def unfollow_or_follow_someone(self,person):#can follow or unfollow someone
 		self.go_to_others_profile(person)
 		try:	
 			WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/section/main/div/header/section/div[1]/div[1]/span/span[1]/button'))).click()
 		except:
 			WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/section/main/div/header/section/div[1]/div[2]/span/span[1]/button'))).click()
 			WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[4]/div/div/div/div[3]/button[1]'))).click()
-	def go_to_others_profile(self,person):
+		self.driver.get('https://www.instagram.com/')
+	
+	def go_to_others_profile(self,person):#goes to a users profile
 		try:
 			x=WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="react-root"]/section/nav/div[2]/div/div/div[2]/input')))
 			x.send_keys(person)
 			WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="react-root"]/section/nav/div[2]/div/div/div[2]/div[3]/div[2]/div/a[1]'))).click()
 		except:
 			print('no results found')
-	def download_all_users_posts(self,driver, timeout,acc):
+	
+	def download_all_users_posts(self,driver,acc, timeout=3):#downloaads all posts of a user
 		self.go_to_others_profile(acc)
 		sleep(3)
 		scroll_pause_time = timeout
@@ -162,3 +163,15 @@ class Bot:
 			except:
 				return 'No folder named s found. Create one the try again'
 			q+=1
+		
+		urllib.request.urlretrieve(self.download_profile_pic(acc), "s/"+acc+'pro_pic'+'.jpg')
+
+		
+		
+		print("Done! Pictures in the s folder")
+	
+	def download_profile_pic(self,acc):#gets the profile picture of a user
+		sleep(3)
+		pro_pic=self.driver.find_element_by_xpath('//*[@id="react-root"]/section/main/div/header/div/div/span/img')
+		src=pro_pic.get_attribute('src')
+		return src
