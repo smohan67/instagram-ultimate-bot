@@ -26,4 +26,4 @@ Directions:
 Download the exe file
 create a folder
 put the exe file in that folder
-in that folder, create a nother folder called s
+in that folder, create another folder called s
