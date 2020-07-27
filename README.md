@@ -21,4 +21,9 @@ Bugs:
 
 
 
-This is my first project so I'd really apreciate some feedback!
+Directions:
+
+Download the exe file
+create a folder
+put the exe file in that folder
+in that folder, create a nother folder called s
