@@ -23,7 +23,8 @@ Bugs:
 
 Directions:
 
-Download the exe file
-create a folder
-put the exe file in that folder
-in that folder, create another folder called s
+Download the frontend.exe file,
+create a folder,
+put the exe file in that folder,
+in that folder create another folder called s,
+then click on the exe file to run it and it will tell u what to do
