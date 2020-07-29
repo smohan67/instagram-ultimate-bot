@@ -14,6 +14,7 @@ while True:
         try:
             b=Bot(username,password)
             b.go_to_others_profile(b.username)
+            print('Testing in progress...Dont close the browser')
             sleep(5)
             b.driver.close()
             print('success')
@@ -56,7 +57,7 @@ while True:
     print('1. You can get the people that dont follow you back(NOTE: if you have a lot of followers, this might take 5-15 minutes)')
     print('2. You can send someone a message')
     print('3. You can follow or unfollow someone. The bot will base it on if your following or unfollowing them')
-    print('4. You can download all of someones posts(NOTE: Cant download videos and only downloads the 1st pictures of each post and takes a while if the account has a lot of posts)')
+    print('4. You can download all of someones posts(NOTE: Cant download videos and only downloads the 1st pictures of each post and takes a while if the account has a lot of posts and u need to create a folder name (s) in the same directory)')
     print('5. Quit')
     print('')
     print('')
@@ -66,12 +67,15 @@ while True:
         m=input('Do u want to send a message to each one of your unfollowers?(type yes or Yes if you want that)')
         if m=='yes' or m=='Yes':
             try:
+                message=input('What message do u want to send to all the people that dont follow you back?')
                 print('Gonna send a message')
                 b=Bot(username,password)
-                b.get_unfollowers(send_message=True)
+                b.get_unfollowers(send_message=True,message=message)
                 b.driver.close()
+                continue
             except:
                 print('Did you close Chrome?')
+                continue
         else:
             try:
                 b=Bot(username,password)
@@ -79,27 +83,57 @@ while True:
                 b.driver.close()
             except:
                 print('Did you close Chrome?')
+                continue
     if choice==2:
         user=input('Enter the username of the person who you want to send a message: ')
         message=input('Enter the message you want to send:')
-        b=Bot(username,password)
-        b.send_message(user,message)
-        print('Message sent!')
-        b.driver.close()
+        try:
+            b=Bot(username,password)
+            b.send_message(user,message)
+            print('Message sent!')
+            b.driver.close()
+            continue
+        except:
+            print('Message not sent. Please check your spelling of that name or you might have closed chrome.')
+            try:
+                b.driver.close()
+                continue
+            except:
+                continue
     if choice==3:
-        user=input('Who do u want to follow/unfollow')
+        user=input('Who do u want to follow/unfollow? ')
         b=Bot(username,password)
-        b.unfollow_or_follow_someone(user)
+        try:
+            b.unfollow_or_follow_someone(user)
+            print('Success')
+            b.driver.close()
+            continue
+        except:
+            print('Invalid user or you closed chrome')
+            b.driver.close()
+            try:
+                b.driver.close()
+                continue
+            except:
+                continue
     if choice==4:
         account=input('Which account do u want to download?')
         b=Bot(username,password)
-        b.download_all_users_posts(b.driver,account)
-    else:
+        try:
+            b.download_all_users_posts(b.driver,account)
+            b.driver.close()
+            continue
+        except:
+            print('Invalid user or you closed chrome')
+            b.driver.close()
+            try:
+                b.driver.close()
+                continue
+            except:
+                continue
+
+    if choice==5:
+        print('Thank you for using our service')
         break
-    q=input('dou u want to quit?(y/n)')
-    if q=='y':
-        break
-    else:
-        continue
 
     
