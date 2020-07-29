@@ -102,15 +102,14 @@ while True:
                 continue
     if choice==3:
         user=input('Who do u want to follow/unfollow? ')
-        b=Bot(username,password)
         try:
+            b=Bot(username,password)
             b.unfollow_or_follow_someone(user)
             print('Success')
             b.driver.close()
             continue
         except:
             print('Invalid user or you closed chrome')
-            b.driver.close()
             try:
                 b.driver.close()
                 continue
@@ -118,14 +117,13 @@ while True:
                 continue
     if choice==4:
         account=input('Which account do u want to download?')
-        b=Bot(username,password)
         try:
+            b=Bot(username,password)
             b.download_all_users_posts(b.driver,account)
             b.driver.close()
             continue
         except:
             print('Invalid user or you closed chrome')
-            b.driver.close()
             try:
                 b.driver.close()
                 continue
@@ -135,5 +133,3 @@ while True:
     if choice==5:
         print('Thank you for using our service')
         break
-
-    
