@@ -28,3 +28,5 @@ create a folder,
 put the exe file in that folder,
 in that folder create another folder called s,
 then click on the exe file to run it and it will tell u what to do
+
+UPDATE: This is no longer working because instagram updated their frontend. Working version comming out soon
