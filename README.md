@@ -1,5 +1,8 @@
 # instagram-ultimate-bot
 
+UPDATE: This is no longer working because instagram updated their frontend. Working version comming out soon
+
+
 Features:
 -login
 -get a list of the people who follow you and people you follow
@@ -29,4 +32,3 @@ put the exe file in that folder,
 in that folder create another folder called s,
 then click on the exe file to run it and it will tell u what to do
 
-UPDATE: This is no longer working because instagram updated their frontend. Working version comming out soon
