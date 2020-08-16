@@ -1,6 +1,5 @@
 # instagram-ultimate-bot
 
-UPDATE: This is no longer working because instagram updated their frontend. Working version comming out soon
 
 
 Features:
