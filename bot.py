@@ -7,21 +7,25 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.keys import Keys
 import urllib.request
 import pandas
+from selenium.webdriver.chrome.options import Options
 #import all the selenium packages
-
+password='hello12345'
 
 class Bot:
-	def __init__(self, username, pw):#logs in your account
+	def __init__(self, username, pw,headless=True):#logs in your account
 		self.username = username#username
 		self.password=pw#password
-		self.driver = webdriver.Chrome(ChromeDriverManager().install())#driver installed
+		options = Options()
+		if headless:
+			options.headless=True
+		self.driver = webdriver.Chrome(ChromeDriverManager().install(),options=options)#driver installed
 		"""Lines above just set up everything we need"""
 
 		self.driver.get('https://www.instagram.com/')#go to instagram.com
 		sleep(2)#wait 1 second
-		self.driver.find_element_by_xpath('//*[@id="react-root"]/section/main/article/div[2]/div[1]/div/form/div[2]/div/label/input').send_keys(username)#eneter username
-		self.driver.find_element_by_xpath('//*[@id="react-root"]/section/main/article/div[2]/div[1]/div/form/div[3]/div/label/input').send_keys(pw)#eneter username
-		self.driver.find_element_by_xpath('//*[@id="react-root"]/section/main/article/div[2]/div[1]/div/form/div[4]').click()#hits enter
+		self.driver.find_element_by_xpath('//*[@id="loginForm"]/div/div[1]/div/label/input').send_keys(username)#eneter username
+		self.driver.find_element_by_xpath('//*[@id="loginForm"]/div/div[2]/div/label/input').send_keys(pw)#eneter username
+		self.driver.find_element_by_xpath('//*[@id="loginForm"]/div/div[3]/button').click()#hits enter
 		sleep(5)#wait 3 seconds
 
 		try:
@@ -77,52 +81,49 @@ class Bot:
 	def get_unfollowers(self,send_message=False):#gets the people that dont follow you back and has the option to send a message to them
 		followers=self.get_followers_and_following('followers')#stores your followers
 		following=self.get_followers_and_following('yedey')#stores people you follow
-		print(len(followers))
-		print(len(following))
 		trouble=[]
 		for p in following:
 			if p not in followers:
 				trouble.append(p)
+		print('Num of Followers: '+str(len(followers)))
+		print('Num of Followers: '+str(len(following)))
+		print('Unfollowers: '+str(trouble))
+		print(len(trouble))
 		if send_message:#requests to send a message
 			for person in trouble:
 				self.send_message(person,'You dont folow me back...nah jk im bored so i descided to make a bot that would send this to all the people that dont follow me back have a nice day')
-		print(trouble)
+
 		return trouble
 
-	def send_message(self,follower,message,unsend=True):#can send a message to someone
+	def send_message(self,follower,message,spam=1):#can send a message to someone
 		WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/section/nav/div[2]/div/div/div[3]/div/div[2]/a'))).click()#click on dm button on homepage
 		WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/section/div/div[2]/div/div/div[1]/div[1]/div/div[3]/button'))).click()#click compose message
 		sleep(2)
 		self.driver.find_element_by_xpath('/html/body/div[4]/div/div/div[2]/div[1]/div/div[2]/input').send_keys(follower)
 		sleep(2)
-		WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[4]/div/div/div[2]/div[2]/div[1]/div/div[3]/button'))).send_keys(message)
-		WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[4]/div/div/div[1]/div/div[2]/div/button'))).click()
+		WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[4]/div/div/div[2]/div[2]/div'))).click()
 		sleep(2)
-		WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="react-root"]/section/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div/div[2]/textarea'))).send_keys(message)#type message
-		WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/section/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div/div[3]/button'))).click()
-		WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/section/div/div[1]/div/div[1]/a/div/div/img'))).click()#click send
-	
-	def unfollow_or_follow_someone(self,person):#can follow or unfollow someone
-		self.go_to_others_profile(person)
-		try:	
-			WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/section/main/div/header/section/div[1]/div[1]/span/span[1]/button'))).click()
-		except:
-			WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/section/main/div/header/section/div[1]/div[2]/span/span[1]/button'))).click()
-			WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[4]/div/div/div/div[3]/button[1]'))).click()
+		WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[4]/div/div/div[1]/div/div[2]/div/button'))).click()
+		for i in range(spam):
+			WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="react-root"]/section/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div/div[2]/textarea'))).send_keys(message)#type message
+			WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/section/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div/div[3]/button'))).click()
 		self.driver.get('https://www.instagram.com/')
-	
+
 	def go_to_others_profile(self,person):#goes to a users profile
+		x=WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="react-root"]/section/nav/div[2]/div/div/div[2]/input')))
+		x.send_keys(person)
+		WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="react-root"]/section/nav/div[2]/div/div/div[2]/div[3]/div[2]/div/a[1]'))).click()
+
+	def download_all_users_posts(self,acc):#downloaads all posts of a user
+		driver=self.driver
 		try:
-			x=WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="react-root"]/section/nav/div[2]/div/div/div[2]/input')))
-			x.send_keys(person)
-			WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="react-root"]/section/nav/div[2]/div/div/div[2]/div[3]/div[2]/div/a[1]'))).click()
+			self.go_to_others_profile(acc)
 		except:
-			print('no results found')
-	
-	def download_all_users_posts(self,driver,acc, timeout=3):#downloaads all posts of a user
-		self.go_to_others_profile(acc)
+			print('No accounts with the name '+acc+' were found.')
+			return 'no accounts found'
 		sleep(3)
-		scroll_pause_time = timeout
+
+		scroll_pause_time = 3
 
 		# Get scroll height
 		last_height = driver.execute_script("return document.body.scrollHeight")
@@ -131,22 +132,22 @@ class Bot:
 		while True:
 			sleep(3)
 			x=self.driver.find_elements_by_class_name("FFVAD")
-			
+
 			for t in x:
 				z=t.get_attribute('src')
 				if z not in dls:
 					dls.append(z)
 
-			
-			
+
+
 			# Scroll down to bottom
 			driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
 			# Wait to load page
 			sleep(scroll_pause_time)
 
-	
-			
+
+
 
 			# Calculate new scroll height and compare with last scroll height
 			new_height = driver.execute_script("return document.body.scrollHeight")
@@ -154,24 +155,30 @@ class Bot:
 				# If heights are the same it will exit the function
 				break
 			last_height = new_height
-			
+
 		q=1
 		#downloads images
 		for y in dls:
 			try:
 				urllib.request.urlretrieve(y, "s/"+acc+str(q)+'.jpg')
 			except:
-				return 'No folder named s found. Create one the try again'
+				print('No folder named s found. Create one the try again')
+				return
 			q+=1
-		
+
 		urllib.request.urlretrieve(self.download_profile_pic(acc), "s/"+acc+'pro_pic'+'.jpg')
 
-		
-		
+
+
 		print("Done! Pictures in the s folder")
-	
+
 	def download_profile_pic(self,acc):#gets the profile picture of a user
 		sleep(3)
 		pro_pic=self.driver.find_element_by_xpath('//*[@id="react-root"]/section/main/div/header/div/div/span/img')
 		src=pro_pic.get_attribute('src')
 		return src
+	
+
+		
+
+
