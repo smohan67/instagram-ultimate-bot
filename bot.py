@@ -9,7 +9,7 @@ import urllib.request
 import pandas
 from selenium.webdriver.chrome.options import Options
 #import all the selenium packages
-password='hello12345'
+
 
 class Bot:
 	def __init__(self, username, pw,headless=True):#logs in your account
